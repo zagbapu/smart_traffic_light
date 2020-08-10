@@ -1,0 +1,346 @@
+
+Sample.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000016e  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001c2  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001c2  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001f4  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000030  00000000  00000000  00000230  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000006ef  00000000  00000000  00000260  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005e0  00000000  00000000  0000094f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003b7  00000000  00000000  00000f2f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  0000008c  00000000  00000000  000012e8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003a7  00000000  00000000  00001374  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000131  00000000  00000000  0000171b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000020  00000000  00000000  0000184c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 8a 00 	jmp	0x114	; 0x114 <__vector_1>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 44 00 	call	0x88	; 0x88 <main>
+  64:	0c 94 b5 00 	jmp	0x16a	; 0x16a <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <sleep>:
+#include <avr/interrupt.h>
+
+//Creating sleep function to control the delay for the lights
+void sleep(uint8_t millisec)
+{
+while(millisec)
+  6c:	88 23       	and	r24, r24
+  6e:	59 f0       	breq	.+22     	; 0x86 <sleep+0x1a>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  70:	2f e3       	ldi	r18, 0x3F	; 63
+  72:	3d e0       	ldi	r19, 0x0D	; 13
+  74:	93 e0       	ldi	r25, 0x03	; 3
+  76:	21 50       	subi	r18, 0x01	; 1
+  78:	30 40       	sbci	r19, 0x00	; 0
+  7a:	90 40       	sbci	r25, 0x00	; 0
+  7c:	e1 f7       	brne	.-8      	; 0x76 <sleep+0xa>
+  7e:	00 c0       	rjmp	.+0      	; 0x80 <sleep+0x14>
+  80:	00 00       	nop
+{
+_delay_ms(1000);
+millisec--;
+  82:	81 50       	subi	r24, 0x01	; 1
+#include <avr/interrupt.h>
+
+//Creating sleep function to control the delay for the lights
+void sleep(uint8_t millisec)
+{
+while(millisec)
+  84:	a9 f7       	brne	.-22     	; 0x70 <sleep+0x4>
+  86:	08 95       	ret
+
+00000088 <main>:
+}
+
+int main(void)
+{
+//Connecting the Pins of the traffic lights to the pins of the MCU	
+DDRA |=1<<PA5;		 //enable pin 35 red1
+  88:	d5 9a       	sbi	0x1a, 5	; 26
+DDRA |=1<<PA4;		 //enable pin 36 yellow1
+  8a:	d4 9a       	sbi	0x1a, 4	; 26
+DDRA |=1<<PA3;		 //enable pin 37 green1
+  8c:	d3 9a       	sbi	0x1a, 3	; 26
+DDRB |=1<<PB3;		 //enable pin 4 red2
+  8e:	bb 9a       	sbi	0x17, 3	; 23
+DDRB |=1<<PB2;		 //enable pin 3 yellow2
+  90:	ba 9a       	sbi	0x17, 2	; 23
+DDRB |=1<<PB1;		 //enable pin 2 green2
+  92:	b9 9a       	sbi	0x17, 1	; 23
+
+//Setting PORTC as input for infrared sensor buttons
+DDRC = 0x00;	
+  94:	14 ba       	out	0x14, r1	; 20
+int time_normal = 5;
+int time_extended = 7;
+
+
+//Set up for the ultrasonic sensor button
+DDRD = 0<<PD2;		// Set PD2 as input (Using for interrupt INT0)
+  96:	11 ba       	out	0x11, r1	; 17
+PORTD = 1<<PD2;		// Enable PD2 pull-up resistor
+  98:	84 e0       	ldi	r24, 0x04	; 4
+  9a:	82 bb       	out	0x12, r24	; 18
+
+//Setting up the interrupts	
+GICR = 1<<INT0;					// Enable INT0
+  9c:	80 e4       	ldi	r24, 0x40	; 64
+  9e:	8b bf       	out	0x3b, r24	; 59
+MCUCR = 1<<ISC01 | 0<<ISC00;	// Trigger INT0 on rising edge
+  a0:	82 e0       	ldi	r24, 0x02	; 2
+  a2:	85 bf       	out	0x35, r24	; 53
+	
+sei();				//Enable Global Interrupt
+  a4:	78 94       	sei
+
+//Initializing the traffic lights as all off
+ PORTA = 0x00;
+  a6:	1b ba       	out	0x1b, r1	; 27
+ PORTB = 0x00;
+  a8:	18 ba       	out	0x18, r1	; 24
+	PORTB &= ~(1<<PB2);			//off yellow2
+	PORTA &= ~(1<<PA3);			//off green1
+	
+	//Polling to find the value 
+	if(PINC & 0b00000011)
+		time_ew = time_extended;
+  aa:	d7 e0       	ldi	r29, 0x07	; 7
+	else
+		time_ew = time_normal;
+  ac:	c5 e0       	ldi	r28, 0x05	; 5
+ PORTB = 0x00;
+	
+while(1)
+{
+//Stage 1: Keeping Green on EW and Red on NS
+	PORTA |= (1<<PA5);			//on red1 
+  ae:	dd 9a       	sbi	0x1b, 5	; 27
+	PORTB |= (1<<PB1);			//on green2 
+  b0:	c1 9a       	sbi	0x18, 1	; 24
+	PORTB &= ~(1<<PB3);			//off red2
+  b2:	c3 98       	cbi	0x18, 3	; 24
+	PORTA &= ~(1<<PA4);			//off yellow1
+  b4:	dc 98       	cbi	0x1b, 4	; 27
+	PORTB &= ~(1<<PB2);			//off yellow2
+  b6:	c2 98       	cbi	0x18, 2	; 24
+	PORTA &= ~(1<<PA3);			//off green1
+  b8:	db 98       	cbi	0x1b, 3	; 27
+	
+	//Polling to find the value 
+	if(PINC & 0b00000011)
+  ba:	83 b3       	in	r24, 0x13	; 19
+  bc:	83 70       	andi	r24, 0x03	; 3
+  be:	11 f4       	brne	.+4      	; 0xc4 <main+0x3c>
+		time_ew = time_extended;
+	else
+		time_ew = time_normal;
+  c0:	8c 2f       	mov	r24, r28
+  c2:	01 c0       	rjmp	.+2      	; 0xc6 <main+0x3e>
+	PORTB &= ~(1<<PB2);			//off yellow2
+	PORTA &= ~(1<<PA3);			//off green1
+	
+	//Polling to find the value 
+	if(PINC & 0b00000011)
+		time_ew = time_extended;
+  c4:	8d 2f       	mov	r24, r29
+	else
+		time_ew = time_normal;
+	sleep(time_ew);
+  c6:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+	
+//Stage2: Turning EW to yellow & green
+	PORTB |= (1<<PB2);			//on yellow2
+  ca:	c2 9a       	sbi	0x18, 2	; 24
+	sleep(time_yellow);
+  cc:	82 e0       	ldi	r24, 0x02	; 2
+  ce:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+	
+//Stage 3: Turning EW to red, while NS is red	
+	PORTB &= ~(1<<PB2);			//off yellow2
+  d2:	c2 98       	cbi	0x18, 2	; 24
+	PORTB &= ~(1<<PB1);			//off green2
+  d4:	c1 98       	cbi	0x18, 1	; 24
+	PORTB |= (1<<PB3);			//on red2
+  d6:	c3 9a       	sbi	0x18, 3	; 24
+	sleep(time_red);
+  d8:	81 e0       	ldi	r24, 0x01	; 1
+  da:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+	
+//Stage 4: Turning NS to green	
+	PORTA &= ~(1<<PA5);			//off red1
+  de:	dd 98       	cbi	0x1b, 5	; 27
+	PORTA |= (1<<PA3);			//on green1
+  e0:	db 9a       	sbi	0x1b, 3	; 27
+	
+	//Polling to find the value
+	if(PINC & 0b00001100)
+  e2:	83 b3       	in	r24, 0x13	; 19
+  e4:	8c 70       	andi	r24, 0x0C	; 12
+  e6:	11 f4       	brne	.+4      	; 0xec <main+0x64>
+	time_ns = time_extended;
+	else
+	time_ns = time_normal;
+  e8:	8c 2f       	mov	r24, r28
+  ea:	01 c0       	rjmp	.+2      	; 0xee <main+0x66>
+	PORTA &= ~(1<<PA5);			//off red1
+	PORTA |= (1<<PA3);			//on green1
+	
+	//Polling to find the value
+	if(PINC & 0b00001100)
+	time_ns = time_extended;
+  ec:	8d 2f       	mov	r24, r29
+	else
+	time_ns = time_normal;
+	sleep(time_ns);
+  ee:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+
+//Stage 5: Turning NS to green & yellow
+	PORTA |= (1<<PA4);			//on yellow1 
+  f2:	dc 9a       	sbi	0x1b, 4	; 27
+	sleep(time_yellow);
+  f4:	82 e0       	ldi	r24, 0x02	; 2
+  f6:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+	
+//Stage 6: Turning NS red while EW is red	
+	PORTA &= ~(1<<PA3);			//off green1
+  fa:	db 98       	cbi	0x1b, 3	; 27
+	PORTA &= ~(1<<PA4);			//off yellow1
+  fc:	dc 98       	cbi	0x1b, 4	; 27
+	PORTA |= (1<<PA5);			//on red1
+  fe:	dd 9a       	sbi	0x1b, 5	; 27
+	sleep(time_red);
+ 100:	81 e0       	ldi	r24, 0x01	; 1
+ 102:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+	
+//Stage 1: Keeping Green on NS and Red on EW
+	PORTA |= (1<<PA5);			//on red1 
+ 106:	dd 9a       	sbi	0x1b, 5	; 27
+	PORTB |= (1<<PB1);			//on green2 
+ 108:	c1 9a       	sbi	0x18, 1	; 24
+	PORTB &= ~(1<<PB3);			//off red2
+ 10a:	c3 98       	cbi	0x18, 3	; 24
+	PORTA &= ~(1<<PA4);			//off yellow1
+ 10c:	dc 98       	cbi	0x1b, 4	; 27
+	PORTB &= ~(1<<PB2);			//off yellow2
+ 10e:	c2 98       	cbi	0x18, 2	; 24
+	PORTA &= ~(1<<PA3);			//off green1
+ 110:	db 98       	cbi	0x1b, 3	; 27
+
+}
+ 112:	cd cf       	rjmp	.-102    	; 0xae <main+0x26>
+
+00000114 <__vector_1>:
+}
+
+ISR(INT0_vect)
+{
+ 114:	1f 92       	push	r1
+ 116:	0f 92       	push	r0
+ 118:	0f b6       	in	r0, 0x3f	; 63
+ 11a:	0f 92       	push	r0
+ 11c:	11 24       	eor	r1, r1
+ 11e:	2f 93       	push	r18
+ 120:	3f 93       	push	r19
+ 122:	4f 93       	push	r20
+ 124:	5f 93       	push	r21
+ 126:	6f 93       	push	r22
+ 128:	7f 93       	push	r23
+ 12a:	8f 93       	push	r24
+ 12c:	9f 93       	push	r25
+ 12e:	af 93       	push	r26
+ 130:	bf 93       	push	r27
+ 132:	ef 93       	push	r30
+ 134:	ff 93       	push	r31
+		int time_emgcy = 3;
+		PORTA |= (1<<PA5); //on red1 pin28
+ 136:	dd 9a       	sbi	0x1b, 5	; 27
+		PORTB |= (1<<PB3); //on red2
+ 138:	c3 9a       	sbi	0x18, 3	; 24
+		PORTB &= ~(1<<PB1); //off green2
+ 13a:	c1 98       	cbi	0x18, 1	; 24
+		PORTA &= ~(1<<PA4); //off yellow1
+ 13c:	dc 98       	cbi	0x1b, 4	; 27
+		PORTB &= ~(1<<PB2); //off yellow2
+ 13e:	c2 98       	cbi	0x18, 2	; 24
+		PORTA &= ~(1<<PA3); //off green1
+ 140:	db 98       	cbi	0x1b, 3	; 27
+		sleep(time_emgcy);
+ 142:	83 e0       	ldi	r24, 0x03	; 3
+ 144:	0e 94 36 00 	call	0x6c	; 0x6c <sleep>
+ 148:	ff 91       	pop	r31
+ 14a:	ef 91       	pop	r30
+ 14c:	bf 91       	pop	r27
+ 14e:	af 91       	pop	r26
+ 150:	9f 91       	pop	r25
+ 152:	8f 91       	pop	r24
+ 154:	7f 91       	pop	r23
+ 156:	6f 91       	pop	r22
+ 158:	5f 91       	pop	r21
+ 15a:	4f 91       	pop	r20
+ 15c:	3f 91       	pop	r19
+ 15e:	2f 91       	pop	r18
+ 160:	0f 90       	pop	r0
+ 162:	0f be       	out	0x3f, r0	; 63
+ 164:	0f 90       	pop	r0
+ 166:	1f 90       	pop	r1
+ 168:	18 95       	reti
+
+0000016a <_exit>:
+ 16a:	f8 94       	cli
+
+0000016c <__stop_program>:
+ 16c:	ff cf       	rjmp	.-2      	; 0x16c <__stop_program>
